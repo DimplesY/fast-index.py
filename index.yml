@@ -5,20 +5,22 @@ allowed_hosts: ["*"]
 cors_allow_origins: ["*"]
 cors_allow_methods: ["*"]
 cors_allow_credentials: true
-debug: on
 
-# use in development
+# 数据库配置
+datasource_url: "mysql://root:yanjie@localhost:3306/jpa?min_size=5&max_size=20"
+
+# 开发环境
 dev:
   "host": "127.0.0.1"
   "debug": true
   "log_level": "debug"
 
-# use in production
+# 生产环境
 pro:
   "host": "127.0.0.1"
-  "port": "41900"
+  "port": 80
   "log_level": "warning"
 
-# use in test
+# 测试环境
 test:
   log_level: "debug"

@@ -4,8 +4,9 @@
 # @File: db.py
 # @Software: PyCharm
 from databases import Database
+from indexpy import Config
 
 
-DATABASE_URL = "mysql://root:yanjie@localhost:3306/jpa?min_size=5&max_size=20"
+DATABASE_URL = Config().datasource_url
 database = Database(DATABASE_URL)
 

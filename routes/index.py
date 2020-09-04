@@ -6,8 +6,9 @@
 from indexpy.http.responses import TemplateResponse
 from indexpy.routing import Routes
 from utils.db import database
+from middleware.authMiddleware import authMiddleware
 
-index_routes = Routes(http_middlewares=[])
+index_routes = Routes(http_middlewares=[authMiddleware])
 
 
 @index_routes.http("/", name="index", method="get")
@@ -21,3 +22,8 @@ async def get_all(request):
     result = await database.fetch_all(query=query)
     list = [tuple(i) for i in result]
     return {"msg": "查询成功", "data": list}
+
+
+@index_routes.http("/user", name="index-user", method="get")
+async def user(request, userinfo):
+    return f"当前登录的用户是{userinfo}"
