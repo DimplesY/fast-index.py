@@ -3,35 +3,37 @@
 # @Author: dimples_yj
 # @File: jwtUtil.py
 # @Software: PyCharm
-import jwt
-import datetime
+from typing import Optional
 
+import jwt
+from datetime import datetime, timedelta
 
 ALGORITHM = 'HS256'
-SECRET = 'sadjdasidhfdsfsfdyyashdaishdia&'
+SECRET_KEY = 'sadjdasidhfdsfsfdyyashdaishdia&'
 ISSUER = 'dimples_yj'
-
-dic = {
-    'exp': datetime.datetime.now() + datetime.timedelta(days=1),  # 过期时间
-    'iat': datetime.datetime.now(),  # 开始时间
-    'iss': ISSUER,  # 签名
-}
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
-def create_access_token(data: dict):
-    dic['data'] = data
-    token = jwt.encode(data, SECRET, algorithm=ALGORITHM)
-    return token.decode('utf-8')
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(microseconds=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt.decode()
 
 
 def get_user_info(token: str):
-    return jwt.decode(token, SECRET, ISSUER, ALGORITHM)
+    return jwt.decode(token, SECRET_KEY, ISSUER, ALGORITHM)
 
 
 if __name__ == '__main__':
     data = {"username": "dimples"}
     print(type(data))
-    token = create_access_token(data)
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    token = create_access_token(data, access_token_expires)
     print(token)
     user_info = get_user_info(token)
     print(user_info)

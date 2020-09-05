@@ -5,7 +5,10 @@
 # @Software: PyCharm
 from indexpy import Index
 # 路由
+from indexpy.http import Request
+from indexpy.http.responses import Response, JSONResponse
 from indexpy.openapi import OpenAPI
+from jwt import ExpiredSignatureError
 
 from routes.index import index_routes
 from routes.user import user_routes
@@ -15,15 +18,15 @@ from utils.db import database
 app = Index(templates=["templates"])
 log = AppLog("test")
 
-app.mount_asgi(
-    "/v1",
-    OpenAPI("员工管理系统后端接口", "作者：dimples_yj", "0.1.0", tags={
-        "user": {
-            "description": "用户登录、注册接口",
-            "paths": ["/login", "/register"]
-        }
-    })
-)
+# app.mount_asgi(
+#     "/v1",
+#     OpenAPI("xxxx后端接口", "作者：dimples_yj", "0.1.0", tags={
+#         "user": {
+#             "description": "用户登录、注册接口",
+#             "paths": ["/login", "/register"]
+#         }
+#     })
+# )
 
 app.router.extend(index_routes)
 app.router.extend(user_routes)
@@ -39,6 +42,12 @@ async def app_startup():
 async def app_shutdown():
     await database.disconnect()
     log.info("系统退出,数据库连接关闭！")
+
+
+@app.exception_handler(ExpiredSignatureError)
+def token_exp(request: Request, exc: ExpiredSignatureError) -> Response:
+    resp = {"msg": "token过期", "code": 456}
+    return JSONResponse(resp, status_code=456)
 
 
 if __name__ == '__main__':
