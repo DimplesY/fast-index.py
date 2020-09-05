@@ -18,6 +18,7 @@ from utils.db import database
 app = Index(templates=["templates"])
 log = AppLog("test")
 
+# openAPI 文档自动生成，不需要的可以注释掉
 # app.mount_asgi(
 #     "/v1",
 #     OpenAPI("xxxx后端接口", "作者：dimples_yj", "0.1.0", tags={
