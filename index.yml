@@ -7,7 +7,7 @@ cors_allow_methods: ["*"]
 cors_allow_credentials: true
 
 # 数据库配置
-datasource_url: "mysql://root:yanjie@localhost:3306/jpa?min_size=5&max_size=20"
+datasource_url: "mysql://root:yanjie@localhost:3306/index?min_size=5&max_size=20"
 
 # 开发环境
 dev:

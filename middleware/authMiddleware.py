@@ -9,16 +9,19 @@ from utils.jwtUtil import *
 def authMiddleware(endpoint):
     """
     用户认证中间件
-    :param endpoint:
+    :param endpoint: toekn认证中间件
     :return:
     """
 
     async def oauth(request):
-        token = request.headers['x-token']
-        if token:
-            user_info = get_user_info(token)
-            if user_info:
-                respone = await endpoint(request, user_info)
-            return respone
+        try:
+            token = request.headers['x-token']
+            if token:
+                user_info = get_user_info(token)
+                if user_info:
+                    respone = await endpoint(request, user_info)
+                return respone
+        except KeyError:
+            return {"msg": "请登录后再访问", "code": 403}
 
     return oauth

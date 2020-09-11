@@ -18,7 +18,7 @@ async def user_login(request):
     login_p = await request.form()
     username = login_p['username']
     password = login_p['password']
-    token = userLogin(username, password)
+    token = await userLogin(username, password)
     return {"msg": "登录成功", 'token': token}
 
 

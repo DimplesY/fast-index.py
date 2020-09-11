@@ -17,10 +17,17 @@ async def index(request):
 
 
 @index_routes.http("/all", name="get-all", method="get")
-async def get_all(request):
-    query = "select * from cst_customer"
+async def get_all(request, userinfo):
+    query = "select id,username from sys_user"
     result = await database.fetch_all(query=query)
-    list = [tuple(i) for i in result]
+    # list = [tuple(i) for i in result]
+    list = []
+    for item in result:
+        data = dict()
+        data["id"] = item[0]
+        data["username"] = item[1]
+        list.append(data)
+
     return {"msg": "查询成功", "data": list}
 
 
