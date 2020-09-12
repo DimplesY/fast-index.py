@@ -9,6 +9,7 @@ from indexpy.http import Request
 from indexpy.http.responses import Response, JSONResponse
 from indexpy.openapi import OpenAPI
 from jwt import ExpiredSignatureError
+import redis
 
 from routes.index import index_routes
 from routes.user import user_routes
@@ -36,6 +37,8 @@ app.router.extend(user_routes)
 @app.on_startup
 async def app_startup():
     await database.connect()
+    redis.ConnectionPool(host="127.0.0.1", port=6379, decode_responses=True)
+    log.info("redis连接成功")
     log.info("数据库连接成功！")
 
 

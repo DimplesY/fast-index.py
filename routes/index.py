@@ -31,6 +31,16 @@ async def get_all(request, userinfo):
     return {"msg": "查询成功", "data": list}
 
 
-@index_routes.http("/user", name="index-user", method="get")
+@index_routes.http("/user/info", name="index-user", method="get")
 async def user(request, userinfo):
-    return f"当前登录的用户是{userinfo}"
+    token = request.query_params['token']
+    return {"msg": "请求成功", "data": {"name": "dimples", "avatar": "https://s1.ax1x.com/2020/04/17/JZzTD1.jpg"},
+            "code": 2000}
+
+
+@index_routes.http("/user/logout", name="user-logout", method="post")
+async def user_logout(request, userinfo):
+    """
+    用户退出登录
+    """
+    return {"msg": "请求成功", "data": None, "code": 2000}
